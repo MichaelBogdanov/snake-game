@@ -29,7 +29,7 @@ class SnakePart:
             self.rect.y += self.speed_y
 
     def draw(self, screen):
-        return pygame.draw.rect(screen, self.color, self.rect)
+        return pygame.draw.rect(screen, self.color, self.rect, border_radius=SIZE // 4)
 
 
 class Snake:
@@ -70,7 +70,7 @@ class Apple:
         self.color = (255, 0, 0)
 
     def draw(self, screen):
-        return pygame.draw.rect(screen, self.color, (self.x, self.y, SIZE, SIZE))
+        return pygame.draw.rect(screen, self.color, (self.x, self.y, SIZE, SIZE), border_radius=SIZE // 2)
 
 
 def main():
