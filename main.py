@@ -1,6 +1,7 @@
 import os
 import sys
 import pygame
+from random import randint
 
 
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -10,7 +11,7 @@ HEIGHT = WIDTH // 16 * 9
 SIZE = WIDTH // 16 // 5
 
 SCREEN = pygame.display.set_mode((WIDTH, HEIGHT))
-FPS = 60
+FPS = 120
 
 
 class SnakePart:
@@ -84,13 +85,6 @@ def main():
     while True:
         clock.tick(FPS)
 
-        SCREEN.fill((255, 255, 255))
-
-        for i in range(0, WIDTH, SIZE):
-            pygame.draw.line(SCREEN, (235, 235, 235), (i, 0), (i, HEIGHT))
-        for i in range(0, HEIGHT, SIZE):
-            pygame.draw.line(SCREEN, (235, 235, 235), (0, i), (WIDTH, i))
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -112,13 +106,29 @@ def main():
                     snake.new_speed_x = snake.head.speed
                     snake.new_speed_y = 0
 
+        SCREEN.fill((255, 255, 255))
+
+        for i in range(0, WIDTH, SIZE):
+            pygame.draw.line(SCREEN, (235, 235, 235), (i, 0), (i, HEIGHT))
+        for i in range(0, HEIGHT, SIZE):
+            pygame.draw.line(SCREEN, (235, 235, 235), (0, i), (WIDTH, i))
+
         apple.draw(SCREEN)
 
         snake.update()
 
         if snake.head.rect.x == apple.x and snake.head.rect.y == apple.y:
-            snake.body.insert(0, SnakePart(snake.head.rect.x // SIZE * SIZE, snake.head.rect.y // SIZE * SIZE))
+            new_part = SnakePart(snake.head.rect.x // SIZE * SIZE, snake.head.rect.y // SIZE * SIZE)
+            snake.body.insert(0, new_part)
             snake.speeds.insert(0, (snake.head.speed_x, snake.head.speed_y))
+            while True:
+                apple.x = SIZE * randint(0, WIDTH // SIZE - 1)
+                apple.y = SIZE * randint(0, HEIGHT // SIZE - 1)
+                for part in snake.body:
+                    if apple.x == part.rect.x and apple.y == part.rect.y:
+                        break
+                else:
+                    break
 
         snake.draw(SCREEN)
 
